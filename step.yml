@@ -1,0 +1,20 @@
+title: Run Expo Application Services (EAS) build
+summary: Runs a build on Expo Application Services (EAS).
+
+website: https://github.com/bitrise-steplib/bitrise-step-run-eas-build
+source_code_url: https://github.com/bitrise-steplib/bitrise-step-run-eas-build
+support_url: https://github.com/bitrise-steplib/bitrise-step-run-eas-build/issues
+
+project_type_tags:
+- react-native
+
+type_tags:
+  - build
+
+toolkit:
+  go:
+    package_name: github.com/bitrise-steplib/bitrise-step-run-eas-build
+
+inputs: []
+
+outputs: []
