@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
+	"github.com/bitrise-io/go-utils/v2/command"
 	"github.com/bitrise-io/go-utils/v2/env"
 	"github.com/bitrise-io/go-utils/v2/log"
 	"github.com/bitrise-steplib/bitrise-step-run-eas-build/step"
@@ -15,38 +16,28 @@ func main() {
 
 func run() int {
 	logger := log.NewLogger()
-	step := createStep(logger)
-	config, err := step.ProcessConfig()
+
+	s := createStep(logger)
+	cfg, err := s.ProcessConfig()
 	if err != nil {
 		logger.Errorf(err.Error())
 		return 1
 
 	}
 
-	if err := step.InstallDeps(); err != nil {
+	if err := s.Run(cfg); err != nil {
 		logger.Errorf(err.Error())
-		return 1
-	}
-
-	res, runErr := step.Run(config)
-	exportErr := step.Export(res)
-
-	if runErr != nil {
-		logger.Errorf(runErr.Error())
-		return 1
-	}
-
-	if exportErr != nil {
-		logger.Errorf(exportErr.Error())
 		return 1
 	}
 
 	return 0
 }
 
-func createStep(logger log.Logger) step.RunEASBuild {
+func createStep(logger log.Logger) step.EASBuilder {
 	envRepository := env.NewRepository()
 	inputParser := stepconf.NewInputParser(envRepository)
+	commandFactory := command.NewFactory(envRepository)
+	clientBuilder := step.NewEASClientBuilder(commandFactory, logger)
 
-	return step.NewRunEASBuild(inputParser)
+	return step.NewEASBuilder(inputParser, logger, clientBuilder)
 }

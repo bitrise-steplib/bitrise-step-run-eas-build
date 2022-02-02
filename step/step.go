@@ -1,93 +1,60 @@
 package step
 
 import (
-	"errors"
-	"strings"
+	"fmt"
 
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
+	"github.com/bitrise-io/go-utils/v2/log"
 )
 
-// Input ...
+type EASClientBuilder interface {
+	Build(token stepconf.Secret, workDir string) EASClient
+}
+
+type EASClient interface {
+	Build(platform string) error
+}
+
 type Input struct {
-	User      stepconf.Secret `env:"user,required"`
-	Password  stepconf.Secret `env:"password,required"`
-	Platforms string          `env:"platforms,required"`
+	Token    stepconf.Secret `env:"access_token,required"`
+	Platform string          `env:"platform,opt[all,android,ios]"`
+	WorkDir  string          `env:"work_dir,dir"`
 }
 
-// Config ...
-type Config struct {
-	User      stepconf.Secret
-	Password  stepconf.Secret
-	Platforms []string
+type EASBuilder struct {
+	inputParser   stepconf.InputParser
+	logger        log.Logger
+	clientBuilder EASClientBuilder
 }
 
-type ExpoClient interface {
-	Login(user, password stepconf.Secret) error
-	Build(platforms []string, options ...string) error
+func NewEASBuilder(inputParser stepconf.InputParser, logger log.Logger, clientBuilder EASClientBuilder) EASBuilder {
+	return EASBuilder{
+		inputParser:   inputParser,
+		logger:        logger,
+		clientBuilder: clientBuilder,
+	}
 }
 
-// RunEASBuild ...
-type RunEASBuild struct {
-	inputParser stepconf.InputParser
-	expoClient  ExpoClient
-}
-
-// NewRunEASBuild ...
-func NewRunEASBuild(inputParser stepconf.InputParser) RunEASBuild {
-	return RunEASBuild{inputParser: inputParser}
-}
-
-// ProcessConfig ...
-func (s RunEASBuild) ProcessConfig() (Config, error) {
+func (s EASBuilder) ProcessConfig() (Input, error) {
 	var input Input
 	err := s.inputParser.Parse(&input)
 	if err != nil {
-		return Config{}, err
+		return Input{}, err
 	}
 	stepconf.Print(input)
 
-	var platforms []string
-	split := strings.Split(input.Platforms, "\n")
-	for _, e := range split {
-		e = strings.TrimSpace(e)
-		if len(e) > 0 {
-			platforms = append(platforms, e)
-		}
-	}
-	if len(platforms) == 0 {
-		return Config{}, errors.New("no platform specified")
-	}
-
-	return Config{
-		User:      input.User,
-		Password:  input.Password,
-		Platforms: platforms,
-	}, nil
+	return input, nil
 }
 
-// InstallDeps ...
-func (s RunEASBuild) InstallDeps() error {
-	return nil
-}
+func (s EASBuilder) Run(input Input) error {
+	client := s.clientBuilder.Build(input.Token, input.WorkDir)
 
-// Result ...
-type Result struct {
-}
+	s.logger.Println()
+	s.logger.TInfof("Running EAS build")
 
-// Run ...
-func (s RunEASBuild) Run(cfg Config) (Result, error) {
-	if err := s.expoClient.Login(cfg.User, cfg.Password); err != nil {
-		return Result{}, err
+	if err := client.Build(input.Platform); err != nil {
+		return fmt.Errorf("running eas build failed: %w", err)
 	}
 
-	if err := s.expoClient.Build(cfg.Platforms); err != nil {
-		return Result{}, err
-	}
-
-	return Result{}, nil
-}
-
-// Export ...
-func (s RunEASBuild) Export(result Result) error {
 	return nil
 }

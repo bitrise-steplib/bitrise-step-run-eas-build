@@ -15,6 +15,26 @@ toolkit:
   go:
     package_name: github.com/bitrise-steplib/bitrise-step-run-eas-build
 
-inputs: []
+inputs:
+- access_token:
+  opts:
+    title: Personal Access Token
+    summary: Expo Personal Access Token
+    is_sensitive: true
+    is_required: true
 
-outputs: []
+- platform: all
+  opts:
+    title: Platform
+    summary: Platform to build
+    is_required: true
+    value_options:
+    - all
+    - android
+    - ios
+
+- work_dir: $BITRISE_SOURCE_DIR
+  opts:
+    title: Work dir
+    summary: Directory containing the Expo project (app.json)
+    is_required: true
