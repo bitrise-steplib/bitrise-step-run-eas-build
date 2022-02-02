@@ -33,7 +33,7 @@ workflows:
     - path::./:
         inputs:
         - access_token: $EXPO_PERSONAL_ACCESS_TOKEN
-        - platform: all
+        - platform: android
         - work_dir: ./_tmp
 
   generate_readme:
