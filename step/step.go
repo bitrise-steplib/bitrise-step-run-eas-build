@@ -2,6 +2,7 @@ package step
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/bitrise-io/go-steputils/v2/stepconf"
 	"github.com/bitrise-io/go-utils/v2/log"
@@ -52,9 +53,44 @@ func (s EASBuilder) Run(input Input) error {
 	s.logger.Println()
 	s.logger.TInfof("Running EAS build")
 
+	start := time.Now()
+
 	if err := client.Build(input.Platform); err != nil {
 		return fmt.Errorf("running eas build failed: %w", err)
 	}
 
+	s.logger.TDonef("Finished in: %s", runtime(time.Since(start)))
+
 	return nil
+}
+
+func runtime(d time.Duration) string {
+	const minToSec = 60
+	const hToMin = 60
+
+	elapsed := int(d / time.Second)
+
+	min := elapsed / minToSec
+	sec := elapsed - (min * minToSec)
+
+	h := min / hToMin
+	min -= h * hToMin
+
+	s := ""
+	if h > 0 {
+		s += fmt.Sprintf("%dh", h)
+	}
+	if min > 0 {
+		if len(s) > 0 {
+			s += " "
+		}
+		s += fmt.Sprintf("%dm", min)
+	}
+	if sec > 0 {
+		if len(s) > 0 {
+			s += " "
+		}
+		s += fmt.Sprintf("%ds", sec)
+	}
+	return s
 }
