@@ -9,7 +9,7 @@ project_type_tags:
 - react-native
 
 type_tags:
-  - build
+- build
 
 toolkit:
   go:
