@@ -48,7 +48,7 @@ func TestEASBuilder_Run(t *testing.T) {
 	clientBuilder.On("Build", mock.Anything, mock.Anything).Return(client).Once()
 
 	step := NewEASBuilder(nil, log.NewLogger(), clientBuilder)
-	err := step.Run(Input{})
+	err := step.Run(Config{})
 	require.NoError(t, err)
 
 	clientBuilder.AssertExpectations(t)

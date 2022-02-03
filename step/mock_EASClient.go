@@ -9,13 +9,20 @@ type MockEASClient struct {
 	mock.Mock
 }
 
-// Build provides a mock function with given fields: platform
-func (_m *MockEASClient) Build(platform string) error {
-	ret := _m.Called(platform)
+// Build provides a mock function with given fields: platform, options
+func (_m *MockEASClient) Build(platform string, options ...string) error {
+	_va := make([]interface{}, len(options))
+	for _i := range options {
+		_va[_i] = options[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, platform)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string) error); ok {
-		r0 = rf(platform)
+	if rf, ok := ret.Get(0).(func(string, ...string) error); ok {
+		r0 = rf(platform, options...)
 	} else {
 		r0 = ret.Error(0)
 	}

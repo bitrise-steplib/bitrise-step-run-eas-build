@@ -25,8 +25,10 @@ func NewClient(commandFactory command.Factory, logger log.Logger, token stepconf
 	}
 }
 
-func (c Client) Build(platform string) error {
-	cmd := c.commandFactory.Create("npx", []string{"eas-cli", "build", "--platform", platform, "--non-interactive"}, &command.Opts{
+func (c Client) Build(platform string, options ...string) error {
+	args := []string{"eas-cli", "build", "--platform", platform, "--non-interactive"}
+	args = append(args, options...)
+	cmd := c.commandFactory.Create("npx", args, &command.Opts{
 		Env:    []string{"EXPO_TOKEN=" + string(c.token)},
 		Dir:    c.workDir,
 		Stdout: os.Stdout,
