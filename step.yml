@@ -5,7 +5,7 @@ description: |-
 
   The step runs `EXPO_TOKEN=[access_token] npx eas-cli build --platform [platform] --non-interactive [eas_options]`
 
-  in the provided [work_dir].
+  in the provided `[work_dir]`.
 
 website: https://github.com/bitrise-steplib/bitrise-step-run-eas-build
 source_code_url: https://github.com/bitrise-steplib/bitrise-step-run-eas-build
@@ -46,7 +46,7 @@ inputs:
 - work_dir: $BITRISE_SOURCE_DIR
   opts:
     title: Work dir
-    summary: Directory containing the Expo project (app.json).
+    summary: Directory containing the Expo project (`app.json`).
     is_required: true
 
 - eas_options:
