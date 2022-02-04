@@ -88,32 +88,5 @@ func (s EASBuilder) Run(cfg Config) error {
 }
 
 func runtime(d time.Duration) string {
-	const minToSec = 60
-	const hToMin = 60
-
-	elapsed := int(d / time.Second)
-
-	min := elapsed / minToSec
-	sec := elapsed - (min * minToSec)
-
-	h := min / hToMin
-	min -= h * hToMin
-
-	s := ""
-	if h > 0 {
-		s += fmt.Sprintf("%dh", h)
-	}
-	if min > 0 {
-		if len(s) > 0 {
-			s += " "
-		}
-		s += fmt.Sprintf("%dm", min)
-	}
-	if sec > 0 {
-		if len(s) > 0 {
-			s += " "
-		}
-		s += fmt.Sprintf("%ds", sec)
-	}
-	return s
+	return fmt.Sprint(d.Round(time.Second))
 }

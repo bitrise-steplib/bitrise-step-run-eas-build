@@ -23,12 +23,12 @@ func Test_runtime(t *testing.T) {
 		{
 			name: "formats duration < 1h",
 			d:    (45 * time.Minute) + (30 * time.Second),
-			want: "45m 30s",
+			want: "45m30s",
 		},
 		{
 			name: "formats duration > 1h",
 			d:    (2 * time.Hour) + (45 * time.Minute) + (30 * time.Second),
-			want: "2h 45m 30s",
+			want: "2h45m30s",
 		},
 	}
 	for _, tt := range tests {
