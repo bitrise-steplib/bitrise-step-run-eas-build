@@ -19,10 +19,10 @@ type_tags:
 
 deps:
   brew:
-    - name: node
+  - name: node
   apt_get:
-    - name: nodejs
-    - name: npm
+  - name: nodejs
+  - name: npm
 
 toolkit:
   go:
