@@ -1,0 +1,69 @@
+title: Run Expo Application Services (EAS) build
+summary: Runs a build on Expo Application Services (EAS).
+description: |-
+  Runs a build on Expo Application Services (EAS).
+
+  The step runs `EXPO_TOKEN=[access_token] npx eas-cli build --platform [platform] --non-interactive [eas_options]`
+
+  in the provided `[work_dir]`.
+
+website: https://github.com/bitrise-steplib/bitrise-step-run-eas-build
+source_code_url: https://github.com/bitrise-steplib/bitrise-step-run-eas-build
+support_url: https://github.com/bitrise-steplib/bitrise-step-run-eas-build/issues
+
+project_type_tags:
+- react-native
+
+type_tags:
+- build
+
+deps:
+  brew:
+  - name: node
+  apt_get:
+  - name: nodejs
+  - name: npm
+
+toolkit:
+  go:
+    package_name: github.com/bitrise-steplib/bitrise-step-run-eas-build
+
+inputs:
+- access_token:
+  opts:
+    title: Access Token
+    summary: Expo Access Token.
+    description: |-
+      Expo Access Token.
+
+      Visit [Expo Documentation](https://docs.expo.dev/accounts/programmatic-access) to generate one.
+    is_sensitive: true
+    is_required: true
+
+- platform: all
+  opts:
+    title: Platform
+    summary: Platform to build.
+    is_required: true
+    value_options:
+    - all
+    - android
+    - ios
+
+- work_dir: $BITRISE_SOURCE_DIR
+  opts:
+    title: Work dir
+    summary: Directory containing the Expo project (`app.json`).
+    is_required: true
+
+- eas_options:
+  opts:
+    title: eas command options
+    summary: Additional options for the eas command.
+    description: |-
+      Additional options for the eas command.
+
+      The step runs `EXPO_TOKEN=[access_token] npx eas-cli build --platform [platform] --non-interactive`,
+      use this input to pass additional option to the command.
+
+      Example: `--profile=development`.

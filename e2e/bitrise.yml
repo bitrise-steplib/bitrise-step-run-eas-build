@@ -1,0 +1,50 @@
+format_version: "11"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+app:
+  envs:
+  - EXPO_ACCESS_TOKEN: $EXPO_ACCESS_TOKEN
+  - SAMPLE_APP_URL: https://github.com/bitrise-io/expo-sample-managed.git
+  - SAMPLE_APP_BRANCH: main
+
+workflows:
+  test_android:
+    before_run:
+    - _clone_sample_project
+    steps:
+    - path::./:
+        inputs:
+        - access_token: $EXPO_ACCESS_TOKEN
+        - platform: android
+        - work_dir: ./_tmp
+        - eas_options: --profile=production
+
+  test_ios_withouth_eas_config_file:
+    before_run:
+    - _clone_sample_project
+    steps:
+    - script:
+        inputs:
+        - content: |-
+            #!/bin/env bash
+            set -ex
+            rm ./_tmp/eas.json
+    - path::./:
+        inputs:
+        - access_token: $EXPO_ACCESS_TOKEN
+        - platform: ios
+        - work_dir: ./_tmp
+
+  _clone_sample_project:
+    steps:
+    - script:
+        inputs:
+        - content: |-
+            #!/bin/env bash
+            set -ex
+            rm -rf ./_tmp
+    - git::https://github.com/bitrise-steplib/bitrise-step-simple-git-clone.git:
+        inputs:
+        - repository_url: $SAMPLE_APP_URL
+        - branch: $SAMPLE_APP_BRANCH
+        - clone_into_dir: ./_tmp
