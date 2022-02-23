@@ -58,7 +58,7 @@ func (s EASBuilder) ProcessConfig() (Config, error) {
 		var err error
 		options, err = shellquote.Split(input.EASOptions)
 		if err != nil {
-			return Config{}, fmt.Errorf("invalid eas_options: %w", err)
+			return Config{}, fmt.Errorf("eas_options are not valid CLI arguments: %w", err)
 		}
 	}
 
