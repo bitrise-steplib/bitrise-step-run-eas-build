@@ -49,7 +49,7 @@ func (s EASBuilder) ProcessConfig() (Config, error) {
 	var input Input
 	err := s.inputParser.Parse(&input)
 	if err != nil {
-		return Config{}, fmt.Errorf(err.Error())
+		return Config{}, err
 	}
 	stepconf.Print(input)
 
