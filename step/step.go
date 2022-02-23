@@ -49,7 +49,7 @@ func (s EASBuilder) ProcessConfig() (Config, error) {
 	var input Input
 	err := s.inputParser.Parse(&input)
 	if err != nil {
-		return Config{}, err
+		return Config{}, fmt.Errorf("Process config: %w", err)
 	}
 	stepconf.Print(input)
 
@@ -58,7 +58,7 @@ func (s EASBuilder) ProcessConfig() (Config, error) {
 		var err error
 		options, err = shellquote.Split(input.EASOptions)
 		if err != nil {
-			return Config{}, fmt.Errorf("invalid eas_options: %w", err)
+			return Config{}, fmt.Errorf("Process config: invalid quoting of eas_options: %w", err)
 		}
 	}
 
@@ -79,7 +79,7 @@ func (s EASBuilder) Run(cfg Config) error {
 	start := time.Now()
 
 	if err := client.Build(cfg.Platform, cfg.EASOptions...); err != nil {
-		return fmt.Errorf("running eas build failed: %w", err)
+		return fmt.Errorf("Run: running eas build failed: %w", err)
 	}
 
 	s.logger.TDonef("Finished in: %s", runtime(time.Since(start)))
