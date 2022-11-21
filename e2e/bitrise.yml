@@ -5,7 +5,7 @@ app:
   envs:
   - EXPO_ACCESS_TOKEN: $EXPO_ACCESS_TOKEN
   - SAMPLE_APP_URL: https://github.com/bitrise-io/expo-sample-managed.git
-  - SAMPLE_APP_BRANCH: main
+  - SAMPLE_APP_BRANCH: update-sample
 
 workflows:
   test_android:
