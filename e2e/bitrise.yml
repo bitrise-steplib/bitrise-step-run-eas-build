@@ -17,7 +17,7 @@ workflows:
         - access_token: $EXPO_ACCESS_TOKEN
         - platform: android
         - work_dir: ./_tmp
-        - eas_options: --profile=production
+        - eas_options: --profile=production --no-wait
 
   test_ios_withouth_eas_config_file:
     before_run:
@@ -34,6 +34,7 @@ workflows:
         - access_token: $EXPO_ACCESS_TOKEN
         - platform: ios
         - work_dir: ./_tmp
+        - eas_options: --no-wait
 
   _clone_sample_project:
     steps:
