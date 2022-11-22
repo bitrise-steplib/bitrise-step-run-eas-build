@@ -29,6 +29,7 @@ workflows:
             #!/bin/env bash
             set -ex
             rm ./_tmp/eas.json
+    - yarn: {} # Resolves error: Error: Cannot find 'expo-modules-autolinking' package in your project, make sure that you have 'expo' package installed
     - path::./:
         inputs:
         - access_token: $EXPO_ACCESS_TOKEN
