@@ -5,7 +5,7 @@ app:
   envs:
   - EXPO_ACCESS_TOKEN: $EXPO_ACCESS_TOKEN
   - SAMPLE_APP_URL: https://github.com/bitrise-io/expo-sample-managed.git
-  - SAMPLE_APP_BRANCH: main
+  - SAMPLE_APP_BRANCH: update-sample
 
 workflows:
   test_android:
@@ -17,7 +17,7 @@ workflows:
         - access_token: $EXPO_ACCESS_TOKEN
         - platform: android
         - work_dir: ./_tmp
-        - eas_options: --profile=production
+        - eas_options: --profile=production --no-wait
 
   test_ios_withouth_eas_config_file:
     before_run:
@@ -29,11 +29,13 @@ workflows:
             #!/bin/env bash
             set -ex
             rm ./_tmp/eas.json
+    - yarn: { }  # Resolves error: Error: Cannot find 'expo-modules-autolinking' package in your project, make sure that you have 'expo' package installed
     - path::./:
         inputs:
         - access_token: $EXPO_ACCESS_TOKEN
         - platform: ios
         - work_dir: ./_tmp
+        - eas_options: --no-wait
 
   _clone_sample_project:
     steps:
