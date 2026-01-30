@@ -20,13 +20,13 @@ func run() int {
 	s := createStep(logger)
 	cfg, err := s.ProcessConfig()
 	if err != nil {
-		logger.Errorf(err.Error())
+		logger.Errorf("Process config: %s", err)
 		return 1
 
 	}
 
 	if err := s.Run(cfg); err != nil {
-		logger.Errorf(err.Error())
+		logger.Errorf("Run: %s", err)
 		return 1
 	}
 
